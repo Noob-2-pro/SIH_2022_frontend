@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "692836022863",
+    "project_id": "sahaya-c8632",
+    "storage_bucket": "sahaya-c8632.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:692836022863:android:8ceab2d2e6e1df642e883a",
+        "android_client_info": {
+          "package_name": "com.example.sih_2022_sahaye"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "692836022863-jsfeqp2rl5hdf41ntntq25jqmntadnmc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sih_2022_sahaye",
+            "certificate_hash": "183b3d9f74900c1fd07d6cef4e5640f721d6b4f5"
+          }
+        },
+        {
+          "client_id": "692836022863-0aabb6cqv1tl5j16utce593rl7967m1d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCz76wYbuRp7Fv1iiql261pFYFGFP1VutE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "692836022863-0aabb6cqv1tl5j16utce593rl7967m1d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sih_2022_sahaye/services/post_requests.dart';
+
 class Authentication{
   final _auth=FirebaseAuth.instance;
   String? verificationId1;
   bool isOtpTimeout=false;
   final DBPost post=DBPost();
+
   Future sendOtp( {required String phoneNumber})async{
     phoneNumber='+91'+phoneNumber.toString();
     try{
@@ -19,6 +20,7 @@ class Authentication{
       throw(e.toString());
     }
   }
+  
   _onVerificationCompleted(PhoneAuthCredential authCredential) async {
     debugPrint(authCredential.smsCode.toString());
     try{

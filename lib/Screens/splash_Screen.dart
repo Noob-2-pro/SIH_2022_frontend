@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sih_2022_sahaye/Models/size_config.dart';
 import 'package:sih_2022_sahaye/Screens/user_role_screen.dart';
 import 'package:sih_2022_sahaye/widgets/custom_text_widget.dart';
-class GettingStartedScreen extends StatefulWidget {
-  const GettingStartedScreen({Key? key}) : super(key: key);
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  _GettingStartedScreenState createState() => _GettingStartedScreenState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _GettingStartedScreenState extends State<GettingStartedScreen> {
+class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return   Scaffold(
-
       appBar:null,
       body: Column(
         children: [

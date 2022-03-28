@@ -50,8 +50,8 @@ class _MyAppState extends State<MyApp> {
               title: 'MyApp',
               key: _navKey,
               debugShowCheckedModeBanner: false,
-              // home: HomeScreenOP(),
-               home: isLoggedIn?(index.toString()=="0"? UserHomeScreen():(index.toString()=="1"? HomeScreenOP():(index.toString()=="2"?const AdminHomeScreen():const GettingStartedScreen()))):const GettingStartedScreen(),
+              home: HomeScreenOP(),
+              //  home: isLoggedIn?(index.toString()=="0"? UserHomeScreen():(index.toString()=="1"? HomeScreenOP():(index.toString()=="2"?const AdminHomeScreen():const GettingStartedScreen()))):const GettingStartedScreen(),
               /* builder: (context, widget) {
                 ScreenUtil.setContext(context);
                 return MediaQuery(

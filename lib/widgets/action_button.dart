@@ -2,16 +2,22 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../constants.dart';
 
-
 class ActionButton extends StatelessWidget {
-  ActionButton({Key? key, required this.text, this.color = Colorpalette.mediumPurple, this.onPressed})
-      : super(key: key);
+  ActionButton({
+    Key? key,
+    required this.text,
+    this.color = Colorpalette.mediumPurple,
+    this.onPressed,
+    this.svgString,
+  }) : super(key: key);
   void Function()? onPressed = () {};
-  String text;
-  Color color;
+  final String text;
+  final Color color;
+  final String? svgString;
 
   @override
   Widget build(BuildContext context) {
@@ -20,18 +26,35 @@ class ActionButton extends StatelessWidget {
           () {
             log("not implemented");
           },
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
+      child: Container(
+        width: 90.w,
+        height: 200.h,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              svgString != null ? SvgPicture.string(svgString!) : Container(),
+              SizedBox(
+                height: 10.h,
+              ),
+              Text(
+                text,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.black),
+              ),
+            ],
+          ),
+        ),
       ),
       style: ButtonStyle(
-          fixedSize: MaterialStateProperty.resolveWith((states) => Size.fromWidth(200.w)),
           padding: MaterialStateProperty.resolveWith((states) => EdgeInsets.symmetric(horizontal: 25)),
           backgroundColor: MaterialStateProperty.resolveWith((states) => color),
-          shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              )))),
+          shape: MaterialStateProperty.resolveWith(
+            (states) => RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+              Radius.circular(10),
+            )),
+          )),
     );
   }
 }

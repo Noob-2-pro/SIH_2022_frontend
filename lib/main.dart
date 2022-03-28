@@ -3,23 +3,19 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sih_2022_sahaye/Screens/Authentication/sign_up.dart';
-import 'package:sih_2022_sahaye/Screens/admin/admin_home_screen.dart';
+import 'package:sih_2022_sahaye/Screens/Authentication/login_screen.dart';
 import 'package:sih_2022_sahaye/Screens/app_getting_started_screen.dart';
 import 'package:sih_2022_sahaye/Screens/operator/home_screen_op.dart';
-import 'package:sih_2022_sahaye/Screens/user_role_screen.dart';
-import 'package:sih_2022_sahaye/Screens/users/user_home_screen.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'Models/local_storage.dart';
+import 'Screens/admin/admin_home_screen.dart';
+import 'Screens/users/user_home_screen.dart';
 
 Future<void> main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   if (FirebaseAuth.instance.currentUser != null) {
     final obj = UserModel();
     final res = await obj.getUserType();
-
     runApp(MyApp(
       isLoggedIn: true,
       index: res ?? "",
@@ -46,7 +42,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     bool isLoggedIn = widget.isLoggedIn;
     String index = widget.index;
-    FlutterNativeSplash.remove();
     return ScreenUtilInit(
         designSize: const Size(428, 926),
         minTextAdapt: true,
@@ -55,8 +50,8 @@ class _MyAppState extends State<MyApp> {
               title: 'MyApp',
               key: _navKey,
               debugShowCheckedModeBanner: false,
-              home: UserHomeScreen(),
-              //  home: isLoggedIn?(index.toString()=="0"?const UserHomeScreen():(index.toString()=="1"?const HomeScreenOP():(index.toString()=="2"?const AdminHomeScreen():const GettingStartedScreen()))):const GettingStartedScreen(),
+              home: LoginScreen(index: 0),
+              //  home: isLoggedIn?(index.toString()=="0"? UserHomeScreen():(index.toString()=="1"? HomeScreenOP():(index.toString()=="2"?const AdminHomeScreen():const GettingStartedScreen()))):const GettingStartedScreen(),
               /* builder: (context, widget) {
                 ScreenUtil.setContext(context);
                 return MediaQuery(

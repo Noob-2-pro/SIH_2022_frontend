@@ -13,14 +13,14 @@ class CustomTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    // SizeConfig().init(context);
     return Text(
       txt,
       maxLines:maxLines,
       textAlign: isCenter?TextAlign.center:null,
       style: TextStyle(
         color:clr,
-        fontSize: fontSize*SizeConfig.safeBlockHeight,
+        // fontSize: fontSize*SizeConfig.safeBlockHeight,
         fontWeight: weight,
         decoration: isUnderLine?TextDecoration.underline:null,
         decorationThickness: 2

@@ -14,6 +14,7 @@ import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_text_input_fields.dart';
 import '../user_role_screen.dart';
 import '../users/user_home_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   final int index;
   const LoginScreen({Key? key, required this.index}) : super(key: key);
@@ -25,16 +26,16 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final form = GlobalKey<FormState>();
   String? phno;
-  final auth=Authentication();
+  final auth = Authentication();
   String? otp;
-  bool isOtpSent=false;
-  var isLoading=false;
+  bool isOtpSent = false;
+  var isLoading = false;
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    // SizeConfig().init(context);
     return Scaffold(
       appBar: null,
-     /*appBar:cutomAppBar(isLoggedIn: false, context: context),*/
+      /*appBar:cutomAppBar(isLoggedIn: false, context: context),*/
       body: SafeArea(
         top: true,
         child: SingleChildScrollView(
@@ -48,60 +49,71 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     const Center(
                       child: Padding(
-                        padding: EdgeInsets.only(top: 50,bottom: 50),
-                        child: CustomTextWidget(txt:"Welcome Back",clr: Color(0XFF464444),fontSize: 30,weight: FontWeight.w700,),
+                        padding: EdgeInsets.only(top: 50, bottom: 50),
+                        child: CustomTextWidget(
+                          txt: "Welcome Back",
+                          clr: Color(0XFF464444),
+                          fontSize: 30,
+                          weight: FontWeight.w700,
+                        ),
                       ),
                     ),
                     CustomTextFields(
-                      validator: (value){
-                        if(value.toString().isEmpty)
-                        {
+                      validator: (value) {
+                        if (value.toString().isEmpty) {
                           return "Mobile number can't be empty";
                         }
-                        if(value.toString().length<10)
-                        {
+                        if (value.toString().length < 10) {
                           return "Enter valid Mobile Number";
                         }
                         return null;
-                      }, changed: (value) {
-                      phno=value;
-                    },  type: TextInputType.phone, title: 'Enter Mobile No.',),
-                    if(isOtpSent)
+                      },
+                      changed: (value) {
+                        phno = value;
+                      },
+                      type: TextInputType.phone,
+                      title: 'Enter Mobile No.',
+                    ),
+                    if (isOtpSent)
                       CustomTextFields(
-                        validator: (value){
-                          if(value.toString().isEmpty)
-                          {
+                        validator: (value) {
+                          if (value.toString().isEmpty) {
                             return "OTP can't be empty";
-                          }
-                          else if(value.toString().length<6)
-                          {
+                          } else if (value.toString().length < 6) {
                             return "OTP should contains at least 6 digit";
                           }
                           return null;
-                        }, changed: (value) {
-                        otp=value;
-                        if(value.length==6)
-                        {
-                          signIn();
-                        }
-                      }, type: TextInputType.number, title: 'Enter OTP',),
-                    if(auth.isOtpTimeout)
+                        },
+                        changed: (value) {
+                          otp = value;
+                          if (value.length == 6) {
+                            signIn();
+                          }
+                        },
+                        type: TextInputType.number,
+                        title: 'Enter OTP',
+                      ),
+                    if (auth.isOtpTimeout)
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           setState(() {
-                            auth.sendOtp(phoneNumber: phno!).then((value){
-                              isOtpSent=true;
-                            }).catchError((error){
+                            auth.sendOtp(phoneNumber: phno!).then((value) {
+                              isOtpSent = true;
+                            }).catchError((error) {
                               debugPrint(error.toString());
                             });
                           });
                         },
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 50,right: 50),
+                          padding: const EdgeInsets.only(left: 50, right: 50),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: const [
-                              CustomTextWidget(txt: "Resent Otp?", clr: Color(0XFF2D2626),fontSize: 14,)
+                              CustomTextWidget(
+                                txt: "Resent Otp?",
+                                clr: Color(0XFF2D2626),
+                                fontSize: 14,
+                              )
                             ],
                           ),
                         ),
@@ -112,48 +124,48 @@ class _LoginScreenState extends State<LoginScreen> {
               Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 50),
+                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
                     child: InkWell(
-                      onTap: (){
-                        if(form.currentState!.validate())
-                        {
-                          if(!isOtpSent || auth.isOtpTimeout)
-                          {
+                      onTap: () {
+                        if (form.currentState!.validate()) {
+                          if (!isOtpSent || auth.isOtpTimeout) {
                             setState(() {
-                              auth.sendOtp(phoneNumber: phno!).then((value){
-                                isOtpSent=true;
-                              }).catchError((error){
+                              auth.sendOtp(phoneNumber: phno!).then((value) {
+                                isOtpSent = true;
+                              }).catchError((error) {
                                 debugPrint(error.toString());
                               });
                             });
-                          }
-                          else
-                          {
+                          } else {
                             signIn();
                           }
                         }
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-                        decoration: BoxDecoration(
-                            color: const Color(0XFFCBA7FF),
-                            borderRadius: BorderRadius.circular(15)
-                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        decoration:
+                            BoxDecoration(color: const Color(0XFFCBA7FF), borderRadius: BorderRadius.circular(15)),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Flexible(child: CustomTextWidget(txt: isOtpSent?"VERIFY":"GET OTP",clr: Colors.white,fontSize: 20,weight: FontWeight.bold,)),
+                            Flexible(
+                                child: CustomTextWidget(
+                              txt: isOtpSent ? "VERIFY" : "GET OTP",
+                              clr: Colors.white,
+                              fontSize: 20,
+                              weight: FontWeight.bold,
+                            )),
                           ],
                         ),
                       ),
                     ),
                   ),
-                  if(widget.index==0)
+                  if (widget.index == 0)
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SignUpScreen(index:widget.index)),
+                          MaterialPageRoute(builder: (context) => SignUpScreen(index: widget.index)),
                         );
                       },
                       child: const Padding(
@@ -163,62 +175,54 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                 ],
               ),
-
             ],
           ),
         ),
       ),
     );
   }
-  Future signIn() async{
+
+  Future signIn() async {
     final credential = PhoneAuthProvider.credential(
-      verificationId: auth.verificationId1!,
-      smsCode: otp!,
+      verificationId: auth.verificationId1.toString(),
+      smsCode: otp.toString(),
     );
     await FirebaseAuth.instance.signInWithCredential(credential).then((value) async {
       debugPrint("signIn Success from Firebase");
-      Map body={
-        'getUserFromPhone':phno.toString()
-      };
-      await auth.loginRequest(data:body).then((value){
+      Map body = {'getUserFromPhone': phno.toString()};
+      await auth.loginRequest(data: body).then((value) {
         if (kDebugMode) {
           print('sign in Success from backend, checking user type');
         }
-      }).catchError((error){
+      }).catchError((error) {
         //FirebaseAuth.instance.signOut();
       });
       navigation();
-    }).catchError((error){
+    }).catchError((error) {
       debugPrint("error");
     });
   }
-  navigation(){
+
+  navigation() {
     const storage = FlutterSecureStorage();
     storage.write(key: 'user_type', value: widget.index.toString());
     Navigator.pop(context);
     Navigator.popUntil(context, (route) => false);
-    if(widget.index==0) {
+    if (widget.index == 0) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) =>const UserHomeScreen()),
+        MaterialPageRoute(builder: (context) => const UserHomeScreen()),
       );
-    }
-    else if(widget.index==1)
-    {
+    } else if (widget.index == 1) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) =>const HomeScreenOP()),
+        MaterialPageRoute(builder: (context) => HomeScreenOP()),
       );
-    }
-    else
-    {
+    } else {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) =>const AdminHomeScreen()),
+        MaterialPageRoute(builder: (context) => const AdminHomeScreen()),
       );
     }
   }
-
 }
-
-

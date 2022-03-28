@@ -3,9 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sih_2022_sahaye/Screens/Authentication/login_screen.dart';
 import 'package:sih_2022_sahaye/Screens/app_getting_started_screen.dart';
 import 'package:sih_2022_sahaye/Screens/operator/home_screen_op.dart';
-
 import 'Models/local_storage.dart';
 import 'Screens/admin/admin_home_screen.dart';
 import 'Screens/users/user_home_screen.dart';
@@ -31,8 +31,10 @@ final _navKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   final bool isLoggedIn;
-  final String index; //for recognize user 0 for normal,1 for operator and 2 for admin.
-  const MyApp({Key? key, required this.isLoggedIn, this.index = ""}) : super(key: key);
+  final String
+      index; //for recognize user 0 for normal,1 for operator and 2 for admin.
+  const MyApp({Key? key, required this.isLoggedIn, this.index = ""})
+      : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -50,7 +52,15 @@ class _MyAppState extends State<MyApp> {
               title: 'MyApp',
               key: _navKey,
               debugShowCheckedModeBanner: false,
-              home: HomeScreenOP(),
+              home: isLoggedIn
+                  ? (index.toString() == "0"
+                      ? const UserHomeScreen()
+                      : (index.toString() == "1"
+                          ? HomeScreenOP()
+                          : (index.toString() == "2"
+                              ? const AdminHomeScreen()
+                              : const GettingStartedScreen())))
+                  : const GettingStartedScreen(),
               //  home: isLoggedIn?(index.toString()=="0"? UserHomeScreen():(index.toString()=="1"? HomeScreenOP():(index.toString()=="2"?const AdminHomeScreen():const GettingStartedScreen()))):const GettingStartedScreen(),
               /* builder: (context, widget) {
                 ScreenUtil.setContext(context);

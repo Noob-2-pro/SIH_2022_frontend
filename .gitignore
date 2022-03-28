@@ -30,6 +30,9 @@
 .pub-cache/
 .pub/
 /build/
+macos/Flutter/GeneratedPluginRegistrant.swift
+ios/Podfile.lock
+android/local.properties
 
 # Web related
 lib/generated_plugin_registrant.dart

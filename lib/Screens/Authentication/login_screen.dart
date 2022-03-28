@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var isLoading=false;
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    // SizeConfig().init(context);
     return Scaffold(
       appBar:cutomAppBar(isLoggedIn: false, context: context),
       body: SingleChildScrollView(
@@ -224,7 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
     {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) =>const HomeScreenOP()),
+        MaterialPageRoute(builder: (context) => HomeScreenOP()),
       );
     }
     else

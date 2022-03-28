@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isOtpSent=false;
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    // SizeConfig().init(context);
     return Scaffold(
       appBar:CustomAppBar(),
       body: SingleChildScrollView(

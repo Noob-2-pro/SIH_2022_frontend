@@ -5,8 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sih_2022_sahaye/Screens/operator/home_screen_op.dart';
 
 Future<void> main() async {
-  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  /*FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);*/
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
@@ -28,12 +26,13 @@ class _MyAppState extends State<MyApp> {
         splitScreenMode: true,
         builder: () => MaterialApp(
               title: 'MyApp',
+              home: HomeScreenOP(),
               debugShowCheckedModeBanner: false,
               builder: (context, widget) {
                 ScreenUtil.setContext(context);
                 return MediaQuery(
                   data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                  child: const HomeScreenOP(),
+                  child: widget!,
                 );
               },
               theme: ThemeData(

@@ -40,7 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
 
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    // SizeConfig().init(context);
     return Scaffold(
         resizeToAvoidBottomInset:false,
         appBar:CustomAppBar(),

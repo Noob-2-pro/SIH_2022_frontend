@@ -13,7 +13,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    // SizeConfig().init(context);
     return   Scaffold(
       appBar:null,
       body: Column(

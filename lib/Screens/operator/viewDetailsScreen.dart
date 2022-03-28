@@ -11,7 +11,7 @@ class ViewDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: cutomAppBar(context: context,isLoggedIn: true),
       body: Column(
         children: [
           Container(

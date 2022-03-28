@@ -1,10 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sih_2022_sahaye/Screens/users/user_home_screen.dart';
 import '../../Models/size_config.dart';
 import '../../services/authentication.dart';
+import '../../widgets/custom_appbar.dart';
+import '../../widgets/custom_text_input_fields.dart';
 import '../../widgets/custom_text_widget.dart';
 import '../user_role_screen.dart';
 import 'login_screen.dart';
@@ -42,8 +47,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     // SizeConfig().init(context);
     return Scaffold(
-        resizeToAvoidBottomInset:false,
-        appBar:CustomAppBar(),
+      resizeToAvoidBottomInset:false,
+      appBar:cutomAppBar(isLoggedIn: false, context: context),
       body: AnimatedOpacity(
         opacity: widgetOpacity,
         duration: const Duration(seconds: 1),
@@ -52,9 +57,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
           children: [
             Expanded(
               child: Stack(
+                overflow: Overflow.visible,
                 children: [
                   SizedBox(
-                    height: 400,
+                    height: 300*SizeConfig.safeBlockHeight,
                     width: MediaQuery.of(context).size.width,
                     child: FittedBox(
                       fit: BoxFit.fitWidth,
@@ -85,26 +91,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               children: [
                                 Flexible(
                                   child: CustomTextFields(
-                                    padding2:  const EdgeInsets.only(left: 10,right: 10,bottom: 10),
-                                    padding1: const EdgeInsets.only(left: 10,right: 10,bottom: 10,top:20),
+
+
                                     validator: (value){
-                                    if(value.toString().isEmpty)
-                                    {
-                                      return "Enter your name";
-                                    }
-                                    return null;
-                                  }, changed: (value) {
+                                      if(value.toString().isEmpty)
+                                      {
+                                        return "Enter your name";
+                                      }
+                                      return null;
+                                    }, changed: (value) {
                                     fnm=value;
-                                  }, label: 'First Name', type: TextInputType.name, title: 'Enter First Name',),
+                                  }, type: TextInputType.name, title: 'Enter First Name',),
                                 ),
                                 Flexible(
                                   child: CustomTextFields(
-                                    padding2:  const EdgeInsets.only(left: 10,right: 10,bottom: 10),
-                                    padding1: const EdgeInsets.only(left: 10,right: 10,bottom: 10,top:20),
+
+
                                     validator: (value){return null;},
                                     changed: (value) {
-                                    lnm=value;
-                                  }, label: 'Last Name', type: TextInputType.name, title: 'Enter Last Name',),
+                                      lnm=value;
+                                    }, type: TextInputType.name, title: 'Enter Last Name',),
                                 ),
                               ],
                             ),
@@ -112,21 +118,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               children: [
                                 Flexible(
                                   child: CustomTextFields(
-                                    padding2:  const EdgeInsets.only(left: 10,right: 10,bottom: 10),
-                                    padding1: const EdgeInsets.only(left: 10,right: 10,bottom: 10,top:20),
+
                                     validator: (value){
-                                    if(value.toString().isEmpty)
-                                    {
-                                      return "Mobile number can't be empty";
-                                    }
-                                    if(value.toString().length<10)
-                                    {
-                                      return "Enter valid Mobile Number";
-                                    }
-                                    return null;
-                                  }, changed: (value) {
+                                      if(value.toString().isEmpty)
+                                      {
+                                        return "Mobile number can't be empty";
+                                      }
+                                      if(value.toString().length<10)
+                                      {
+                                        return "Enter valid Mobile Number";
+                                      }
+                                      return null;
+                                    }, changed: (value) {
                                     phno=value;
-                                  }, label: 'Mobile No.', type: TextInputType.phone, title: 'Enter Mobile No.',),
+                                  }, type: TextInputType.phone, title: 'Enter Mobile No.',),
                                 ),
 
                               ],
@@ -135,17 +140,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               children: [
                                 Flexible(
                                   child: CustomTextFields(
-                                    padding2:  const EdgeInsets.only(left: 10,right: 10,bottom: 10),
-                                    padding1: const EdgeInsets.only(left: 10,right: 10,bottom: 10,top:20),
+
+
                                     validator: (value){
                                       return null;
                                     }, changed: (value) {
-                                    phno=value;
-                                  }, label: 'Email Address (optional)', type: TextInputType.emailAddress, title: 'Enter Email Address',),
+                                    eml=value;
+                                  }, type: TextInputType.emailAddress, title: 'Enter Email Address',),
                                 ),
                               ],
                             ),
-                           /* GestureDetector(
+                            /* GestureDetector(
                               onTap: (){},
                               child: AbsorbPointer(
                                 child: TextFormField(
@@ -177,7 +182,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),*/
 
-                           /* if(isOtpSent)
+                            /* if(isOtpSent)
                               CustomTextFields(validator: (value){
                                 if(value.toString().isEmpty)
                                 {
@@ -195,7 +200,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   signIn();
                                 }
                               }, label: 'OTP', type: TextInputType.number, title: 'Enter OTP',),*/
-                           /* if(auth.isOtpTimeout)
+                            /* if(auth.isOtpTimeout)
                               GestureDetector(
                                 onTap: (){
                                   setState(() {
@@ -228,12 +233,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 InkWell(
                   onTap: (){
                     if (form.currentState!.validate()) {
-                        setState(() {
-                          auth.sendOtp(phoneNumber: phno!).then((value) {
-                            isOtpSent = true;
-                            otpDialogBox();
-                          });
+                      setState(() {
+                        auth.sendOtp(phoneNumber: phno!).then((value) {
+                          isOtpSent = true;
+                          otpDialogBox();
                         });
+                      });
 
                     }
                   },
@@ -245,7 +250,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     child: CustomTextWidget(txt: isOtpSent?"VERIFY":"GET OTP",clr: Colors.white,),
                   ),
-    ),
+                ),
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: CustomTextWidget(txt: "New User? Sign Up now", clr: Color(0XFF2D01AD)),
@@ -259,26 +264,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-  signUp({required String otp}){
+  Future signUp({required String otp}) async {
     final credential = PhoneAuthProvider.credential(
       verificationId: auth.verificationId1!,
       smsCode: otp,
     );
-    FirebaseAuth.instance.signInWithCredential(credential).then((value){
+    await FirebaseAuth.instance.signInWithCredential(credential).then((value){
       debugPrint("signIn Success");
-      auth.signUpRequest(data:{
-        "firstName":fnm,
-        "lastName":lnm,
-        "phoneNumber":phno,
-        "type":widget.index==0?"User":(widget.index==1?"Operator":"Admin"),
+      Map body={
+
+        "firstName":fnm.toString(),
+        "lastName":lnm.toString(),
+        "phoneNumber":phno.toString(),
+        "type":"User",
         "latitude":"26.35214",
         "longitude":"29.52411"
-      }).then((value){
+      };
+      if (kDebugMode) {
+        print(body.toString());
+      }
+      auth.signUpRequest(data:body,
+      ).then((value){
+        const storage = FlutterSecureStorage();
+        storage.write(key: 'user_type', value: widget.index.toString());
         Navigator.pop(context);
-
-
+        Navigator.popUntil(context, (route) => false);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =>const UserHomeScreen()),
+        );
       }).catchError((error){
-        print(error.toString());
+        if (kDebugMode) {
+          print(error.toString());
+        }
         Fluttertoast.showToast(msg: "Something went wrong");
         FirebaseAuth.instance.currentUser!.delete();
       });
@@ -320,14 +338,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CustomTextWidget(
-                    txt: "Code has been sent to ${phno}",
+                    txt: "Code has been sent to $phno",
                     clr: const Color(0XFF2B2B2B),
                     fontSize: 12,
                   ),
                 ),
                 OtpTextField(
                     numberOfFields: 6,
-                    borderColor: Color(0XFF00814D),
+                    borderColor: const Color(0XFF00814D),
                     //set to true to show as box or false to show as dash
                     showFieldAsBox: true,
                     autoFocus: true,

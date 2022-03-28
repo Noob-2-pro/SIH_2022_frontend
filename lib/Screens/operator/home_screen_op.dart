@@ -11,7 +11,7 @@ class HomeScreenOP extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: cutomAppBar(),
+      appBar: cutomAppBar(isLoggedIn: true, context: context),
       body: SingleChildScrollView(
         child: Column(
           children: [

@@ -35,8 +35,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   mapbox_gl: ^0.15.0
+  flutter_secure_storage: ^5.0.2
   http:
   fluttertoast: ^8.0.8
+  intl:
   flutter_otp_text_field: ^1.0.0
   firebase_core: ^1.13.1
   firebase_auth:

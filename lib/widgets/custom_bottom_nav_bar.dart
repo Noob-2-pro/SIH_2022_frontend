@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../Models/size_config.dart';
@@ -16,8 +14,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return PreferredSize(
-      preferredSize:  Size.fromHeight(60.h),
+      preferredSize: const Size.fromHeight(60)*SizeConfig.safeBlockHeight,
       child: BottomNavigationBar(
         currentIndex: _selectedIndex, //New
         onTap: _onItemTapped,

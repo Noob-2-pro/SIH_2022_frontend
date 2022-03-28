@@ -92,29 +92,27 @@ class CustomTextFields extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Material(
-        elevation: 5,
-        child: Container(
-          decoration:  BoxDecoration(
-              color: const Color(0XFFF3F3F3),
-              borderRadius: BorderRadius.circular(16)
+      child: Container(
+        decoration:  BoxDecoration(
+            color: const Color(0XFFF3F3F3),
+            borderRadius: BorderRadius.circular(32)
+        ),
+        child: TextFormField(
+          style: const TextStyle(
+              color: Color(0XFF666161)
           ),
-          child: TextFormField(
-            style: const TextStyle(
-                color: Color(0XFF666161)
+          keyboardType: type,
+          validator: validator,
+          maxLines: null,
+          onChanged: changed,
+          decoration:  InputDecoration(
+            contentPadding:const EdgeInsets.all(10),
+            hintText: title,
+            hintStyle: const TextStyle(
+                color:Color(0XFF666161)
             ),
-            keyboardType: type,
-            validator: validator,
-            onChanged: changed,
-            decoration:  InputDecoration(
-              contentPadding:const EdgeInsets.all(10),
-              hintText: title,
-              hintStyle: const TextStyle(
-                  color:Color(0XFF666161)
-              ),
 
-              border: InputBorder.none,
-            ),
+            border: InputBorder.none,
           ),
         ),
       ),

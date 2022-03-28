@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sih_2022_sahaye/Models/local_storage.dart';
 import 'package:sih_2022_sahaye/Screens/app_getting_started_screen.dart';
 import 'package:sih_2022_sahaye/widgets/custom_text_widget.dart';
@@ -15,8 +16,9 @@ AppBar cutomAppBar({required bool isLoggedIn,required BuildContext context}) {
         "assets/images/logo.png",
         width: 100.w,
       ),
-      actions: [
-        if(isLoggedIn)
+      actions:    (isLoggedIn)?[
+       Image.asset("assets/images/user_1.png"),
+
         PopupMenuButton(
           enableFeedback: true,
           onSelected: (index){
@@ -45,6 +47,6 @@ AppBar cutomAppBar({required bool isLoggedIn,required BuildContext context}) {
             ),
           ),
         )
-      ],
+      ]:null,
     );
   }

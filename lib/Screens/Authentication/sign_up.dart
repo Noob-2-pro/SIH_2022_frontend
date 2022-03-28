@@ -48,218 +48,205 @@ class _SignUpScreenState extends State<SignUpScreen> {
     SizeConfig().init(context);
     return Scaffold(
       resizeToAvoidBottomInset:false,
-      appBar:cutomAppBar(isLoggedIn: false, context: context),
-      body: AnimatedOpacity(
-        opacity: widgetOpacity,
-        duration: const Duration(seconds: 1),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Stack(
-                overflow: Overflow.visible,
-                children: [
-                  SizedBox(
-                    height: 300*SizeConfig.safeBlockHeight,
-                    width: MediaQuery.of(context).size.width,
-                    child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: SvgPicture.string(''''<svg width="428" height="709" viewBox="0 0 428 709" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M-29.2643 589.93L446.224 526.584L462 645L-13.4884 708.346L-29.2643 589.93Z" fill="#FD5A58"/>
-<path d="M-3 40L427 0L459 588H-3V40Z" fill="#2D01AD"/>
-<path d="M433 140.401L3 107L-29 598H433V140.401Z" fill="#3C07C2"/>
-<path d="M-1 283.925L429 261L461 598L-1 667V283.925Z" fill="#4A12DE"/>
-<rect x="241" y="510" width="132" height="29" fill="#4A12DE"/>
-</svg>
-
-
-''',),
+     /* appBar:cutomAppBar(isLoggedIn: false, context: context),*/
+      body: SafeArea(
+        child: AnimatedOpacity(
+          opacity: widgetOpacity,
+          duration: const Duration(seconds: 1),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Form(
+                key: form,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                     Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 50),
+                        child: CustomTextWidget(txt:"Welcome ${widget.index==0?User:(widget.index==1?"Operator":"Admin")}",clr: const Color(0XFF464444),fontSize: 30,weight: FontWeight.w700,),
+                      ),
                     ),
-                  ),
-                  Positioned.fill(
-                      child: Form(
-                        key: form,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Center(
-                              child: CustomTextWidget(txt:"SIGN UP",clr: Colors.white,fontSize: 30,weight: FontWeight.w700,),
-                            ),
-                            Row(
-                              children: [
-                                Flexible(
-                                  child: CustomTextFields(
+                    Row(
+                      children: [
+                        Flexible(
+                          child: CustomTextFields(
 
 
-                                    validator: (value){
-                                      if(value.toString().isEmpty)
-                                      {
-                                        return "Enter your name";
-                                      }
-                                      return null;
-                                    }, changed: (value) {
-                                    fnm=value;
-                                  }, type: TextInputType.name, title: 'Enter First Name',),
-                                ),
-                                Flexible(
-                                  child: CustomTextFields(
+                            validator: (value){
+                              if(value.toString().isEmpty)
+                              {
+                                return "Enter your name";
+                              }
+                              return null;
+                            }, changed: (value) {
+                            fnm=value;
+                          }, type: TextInputType.name, title: 'Enter First Name',),
+                        ),
+                        Flexible(
+                          child: CustomTextFields(
 
 
-                                    validator: (value){return null;},
-                                    changed: (value) {
-                                      lnm=value;
-                                    }, type: TextInputType.name, title: 'Enter Last Name',),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Flexible(
-                                  child: CustomTextFields(
+                            validator: (value){return null;},
+                            changed: (value) {
+                              lnm=value;
+                            }, type: TextInputType.name, title: 'Enter Last Name',),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: CustomTextFields(
 
-                                    validator: (value){
-                                      if(value.toString().isEmpty)
-                                      {
-                                        return "Mobile number can't be empty";
-                                      }
-                                      if(value.toString().length<10)
-                                      {
-                                        return "Enter valid Mobile Number";
-                                      }
-                                      return null;
-                                    }, changed: (value) {
-                                    phno=value;
-                                  }, type: TextInputType.phone, title: 'Enter Mobile No.',),
-                                ),
+                            validator: (value){
+                              if(value.toString().isEmpty)
+                              {
+                                return "Mobile number can't be empty";
+                              }
+                              if(value.toString().length<10)
+                              {
+                                return "Enter valid Mobile Number";
+                              }
+                              return null;
+                            }, changed: (value) {
+                            phno=value;
+                          }, type: TextInputType.phone, title: 'Enter Mobile No.',),
+                        ),
 
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Flexible(
-                                  child: CustomTextFields(
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: CustomTextFields(
 
 
-                                    validator: (value){
-                                      return null;
-                                    }, changed: (value) {
-                                    eml=value;
-                                  }, type: TextInputType.emailAddress, title: 'Enter Email Address',),
-                                ),
-                              ],
-                            ),
-                            /* GestureDetector(
-                              onTap: (){},
-                              child: AbsorbPointer(
-                                child: TextFormField(
-                                    textAlignVertical: TextAlignVertical.center,
-                                    maxLines: 1,
-                                    //initialValue: dob,
-                                    keyboardType: TextInputType.datetime,
-                                    textInputAction: TextInputAction.next,
-                                    onFieldSubmitted: (_) =>
-                                        FocusScope.of(context).nextFocus(),
-                                    autofocus: false,
-                                    style: TextStyle(
-                                        fontSize: 14 * SizeConfig.safeBlockWidth,
-                                        color: Color(0xff000000)),
+                            validator: (value){
+                              return null;
+                            }, changed: (value) {
+                            eml=value;
+                          }, type: TextInputType.emailAddress, title: 'Enter Email Address',),
+                        ),
+                      ],
+                    ),
+                    /* GestureDetector(
+                      onTap: (){},
+                      child: AbsorbPointer(
+                        child: TextFormField(
+                            textAlignVertical: TextAlignVertical.center,
+                            maxLines: 1,
+                            //initialValue: dob,
+                            keyboardType: TextInputType.datetime,
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (_) =>
+                                FocusScope.of(context).nextFocus(),
+                            autofocus: false,
+                            style: TextStyle(
+                                fontSize: 14 * SizeConfig.safeBlockWidth,
+                                color: Color(0xff000000)),
 
 //                      style: CustomThemes.ts5,
-                                    decoration: const InputDecoration(
-                                      hintText: "Enter Date of birth",
-                                      border:InputBorder.none,
-                                      suffixIcon:Icon(Icons.keyboard_arrow_down_outlined,
-                                        color: Colors.white,
-                                      )
-                                    ),
-                                    validator: (String? _dt){
-                                      return null;
-                                      }
+                            decoration: const InputDecoration(
+                              hintText: "Enter Date of birth",
+                              border:InputBorder.none,
+                              suffixIcon:Icon(Icons.keyboard_arrow_down_outlined,
+                                color: Colors.white,
+                              )
+                            ),
+                            validator: (String? _dt){
+                              return null;
+                              }
 
-                                ),
-                              ),
-                            ),*/
+                        ),
+                      ),
+                    ),*/
 
-                            /* if(isOtpSent)
-                              CustomTextFields(validator: (value){
-                                if(value.toString().isEmpty)
-                                {
-                                  return "OTP can't be empty";
-                                }
-                                else if(value.toString().length<6)
-                                {
-                                  return "OTP should contains at least 6 digit";
-                                }
-                                return null;
-                              }, changed: (value) {
-                                otp=value;
-                                if(value.length==6)
-                                {
-                                  signIn();
-                                }
-                              }, label: 'OTP', type: TextInputType.number, title: 'Enter OTP',),*/
-                            /* if(auth.isOtpTimeout)
-                              GestureDetector(
-                                onTap: (){
-                                  setState(() {
-                                    auth.sendOtp(phoneNumber: phno!).then((value){
-                                      isOtpSent=true;
-                                    }).catchError((error){
-                                      debugPrint(error.toString());
-                                    });
-                                  });
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 50,right: 50),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: const [
-                                      CustomTextWidget(txt: "Resent Otp?", clr: Colors.white,fontSize: 14,)
-                                    ],
-                                  ),
-                                ),
-                              ),*/
+                    /* if(isOtpSent)
+                      CustomTextFields(validator: (value){
+                        if(value.toString().isEmpty)
+                        {
+                          return "OTP can't be empty";
+                        }
+                        else if(value.toString().length<6)
+                        {
+                          return "OTP should contains at least 6 digit";
+                        }
+                        return null;
+                      }, changed: (value) {
+                        otp=value;
+                        if(value.length==6)
+                        {
+                          signIn();
+                        }
+                      }, label: 'OTP', type: TextInputType.number, title: 'Enter OTP',),*/
+                    /* if(auth.isOtpTimeout)
+                      GestureDetector(
+                        onTap: (){
+                          setState(() {
+                            auth.sendOtp(phoneNumber: phno!).then((value){
+                              isOtpSent=true;
+                            }).catchError((error){
+                              debugPrint(error.toString());
+                            });
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 50,right: 50),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: const [
+                              CustomTextWidget(txt: "Resent Otp?", clr: Colors.white,fontSize: 14,)
+                            ],
+                          ),
+                        ),
+                      ),*/
+                  ],
+                ),
+              ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    child: InkWell(
+                      onTap: (){
+                        if (form.currentState!.validate()) {
+                          setState(() {
+                            auth.sendOtp(phoneNumber: phno!).then((value) {
+                              isOtpSent = true;
+                              otpDialogBox();
+                            });
+                          });
+
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        decoration: BoxDecoration(
+                            color: const Color(0XFFCBA7FF),
+                            borderRadius: BorderRadius.circular(16)
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(child: CustomTextWidget(txt: isOtpSent?"VERIFY":"GET OTP",clr: Colors.white,)),
                           ],
                         ),
-                      ))
-                ],
-              ),
-            ),
-            const SizedBox(height: 100,),
-            Column(
-              children: [
-                InkWell(
-                  onTap: (){
-                    if (form.currentState!.validate()) {
-                      setState(() {
-                        auth.sendOtp(phoneNumber: phno!).then((value) {
-                          isOtpSent = true;
-                          otpDialogBox();
-                        });
-                      });
-
-                    }
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.only(left: 20,right: 20,bottom: 10,top: 10),
-                    decoration: BoxDecoration(
-                        color: const Color(0XFF2D01AD),
-                        borderRadius: BorderRadius.circular(16)
+                      ),
                     ),
-                    child: CustomTextWidget(txt: isOtpSent?"VERIFY":"GET OTP",clr: Colors.white,),
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: CustomTextWidget(txt: "New User? Sign Up now", clr: Color(0XFF2D01AD)),
-                ),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CustomTextWidget(txt: "New User? Sign Up now", clr: Color(0XFF555252)),
+                  ),
 
-              ],
-            )
+                ],
+              )
 
-          ],
+            ],
+          ),
         ),
       ),
     );

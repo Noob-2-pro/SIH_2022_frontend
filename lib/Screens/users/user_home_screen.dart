@@ -7,6 +7,7 @@ import 'package:sih_2022_sahaye/widgets/custom_text_widget.dart';
 import '../../Models/size_config.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
+import 'feedsback_form.dart';
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({Key? key}) : super(key: key);
@@ -107,7 +108,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             {
               Navigator.push(context, MaterialPageRoute(builder: (builder)=>EnrollUpdateScreen(index: index)));
             }
-
+          else if(index==2)
+            {
+              Navigator.push(context, MaterialPageRoute(builder: (builder)=>const FeedBackForm()));
+            }
         },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical:20),

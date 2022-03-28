@@ -30,6 +30,17 @@ class _EnrollUpdateScreenState extends State<EnrollUpdateScreen> {
       initialDate: DateTime.now(),
       firstDate: DateTime(1901, 1),
       lastDate: DateTime(2100),
+      builder: (context,child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: const Color(0XFF041E42),
+            colorScheme: const ColorScheme.light(primary: Color(0XFF041E42)),
+            buttonTheme: const ButtonThemeData(
+                textTheme: ButtonTextTheme.primary
+            ),
+          ), child: child ?? const Text(""),
+        );
+      },
     );
 
     if (picked != null) {
@@ -174,6 +185,7 @@ class _EnrollUpdateScreenState extends State<EnrollUpdateScreen> {
                   ),
                 ),
               ),
+              if(widget.index==1)
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: CustomTextWidget(txt: "(in case you don’t wish to change something you can write the current information)",maxLines: 3, clr: Color(0XFF666161),fontSize: 12,),
@@ -221,7 +233,7 @@ class _EnrollUpdateScreenState extends State<EnrollUpdateScreen> {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

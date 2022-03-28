@@ -9,18 +9,18 @@ import 'package:sih_2022_sahaye/Screens/app_getting_started_screen.dart';
 import 'package:sih_2022_sahaye/Screens/operator/home_screen_op.dart';
 import 'package:sih_2022_sahaye/Screens/user_role_screen.dart';
 import 'package:sih_2022_sahaye/Screens/users/user_home_screen.dart';
-
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'Models/local_storage.dart';
 
 Future<void> main() async {
-  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  /*FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);*/
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp();
   if(FirebaseAuth.instance.currentUser!=null)
     {
       final obj=UserModel();
       final res=await obj.getUserType();
+
       runApp(MyApp(isLoggedIn: true,index: res ?? "",));
     }
   else
@@ -43,6 +43,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     bool isLoggedIn=widget.isLoggedIn;
     String index=widget.index;
+    FlutterNativeSplash.remove();
     return ScreenUtilInit(
         designSize: const Size(428, 926),
         minTextAdapt: true,

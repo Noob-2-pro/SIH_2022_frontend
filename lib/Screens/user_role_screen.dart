@@ -20,7 +20,7 @@ class UserRole extends StatelessWidget {
             child: Stack(
               children: [
                 SizedBox(
-                  height: 400,
+                  height: 450,
                   width: MediaQuery.of(context).size.width,
                   child: FittedBox(
                     fit: BoxFit.fitWidth,

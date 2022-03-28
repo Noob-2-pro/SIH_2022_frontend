@@ -9,7 +9,7 @@ class HomeScreenOP extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: cutomAppBar(),
+      appBar: cutomAppBar(isLoggedIn: true, context: context),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
@@ -34,7 +34,7 @@ class HomeScreenOP extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Icon(Icons.person),
+                      const Icon(Icons.person),
                       Text(
                         "Welcome back !\n Mukesh Gupta",
                         style: Theme.of(context).textTheme.headline2,

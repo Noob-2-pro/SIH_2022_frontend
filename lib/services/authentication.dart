@@ -1,15 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sih_2022_sahaye/services/post_requests.dart';
-
 class Authentication{
   final _auth=FirebaseAuth.instance;
   String? verificationId1;
   bool isOtpTimeout=false;
   final DBPost post=DBPost();
-
   Future sendOtp( {required String phoneNumber})async{
     phoneNumber='+91'+phoneNumber.toString();
     try{
@@ -20,7 +19,6 @@ class Authentication{
       throw(e.toString());
     }
   }
-  
   _onVerificationCompleted(PhoneAuthCredential authCredential) async {
     debugPrint(authCredential.smsCode.toString());
     try{
@@ -47,17 +45,45 @@ class Authentication{
     return null;
   }
   Future signUpRequest({required Map data}) async {
-    var res = await post.sendRequest(headers: {},
+    var res = await post.sendRequest(
         data: data,
+        headers: {
+          'Content-Type':'application/json',
+        },
         url: "http://sahayaapp.herokuapp.com/api/signUp");
-    var decode=jsonDecode(res);
-    return decode;
-  }
-  Future loginRequest({required Map data}) async {
-      var res = await post.sendRequest(headers: {},
-          data: data,
-          url: "http://sahayaapp.herokuapp.com/api/getUserFromPhone");
+    try
+    {
       var decode=jsonDecode(res);
+      if(res.containsKey('Errors') ||res.containsKey('Error') || res.containsKey('error') || res.containsKey('errors'))
+      {
+        throw("Errors");
+      }
       return decode;
     }
+    catch(e){
+      throw(e.toString());
+    }
+  }
+  Future loginRequest({required Map data}) async {
+    var res = await post.sendRequest(
+        headers: {
+          'Content-Type':'application/json',
+        },
+        data: data,
+        url: "http://sahayaapp.herokuapp.com/api/getUserFromPhone");
+    try
+    {
+      var decode=jsonDecode(res);
+      if(res.containsKey('Errors') ||res.containsKey('Error') || res.containsKey('error') || res.containsKey('errors'))
+      {
+        throw("Errors");
+      }
+      return decode;
+    }
+    catch(e){
+      throw(e.toString());
+    }
+
+
+  }
 }

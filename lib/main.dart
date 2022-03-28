@@ -31,8 +31,10 @@ final _navKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   final bool isLoggedIn;
-  final String index; //for recognize user 0 for normal,1 for operator and 2 for admin.
-  const MyApp({Key? key, required this.isLoggedIn, this.index = ""}) : super(key: key);
+  final String
+      index; //for recognize user 0 for normal,1 for operator and 2 for admin.
+  const MyApp({Key? key, required this.isLoggedIn, this.index = ""})
+      : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -50,7 +52,15 @@ class _MyAppState extends State<MyApp> {
               title: 'MyApp',
               key: _navKey,
               debugShowCheckedModeBanner: false,
-              home: LoginScreen(index: 0),
+              home: isLoggedIn
+                  ? (index.toString() == "0"
+                      ? const UserHomeScreen()
+                      : (index.toString() == "1"
+                          ? HomeScreenOP()
+                          : (index.toString() == "2"
+                              ? const AdminHomeScreen()
+                              : const GettingStartedScreen())))
+                  : const GettingStartedScreen(),
               //  home: isLoggedIn?(index.toString()=="0"? UserHomeScreen():(index.toString()=="1"? HomeScreenOP():(index.toString()=="2"?const AdminHomeScreen():const GettingStartedScreen()))):const GettingStartedScreen(),
               /* builder: (context, widget) {
                 ScreenUtil.setContext(context);

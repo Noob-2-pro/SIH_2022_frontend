@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         type: TextInputType.number,
                         title: 'Enter OTP',
                       ),
-                    if (auth.isOtpTimeout)
+                    // if (auth.isOtpTimeout)
                       GestureDetector(
                         onTap: () {
                           setState(() {
@@ -128,7 +128,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: InkWell(
                       onTap: () {
                         if (form.currentState!.validate()) {
-                          if (!isOtpSent || auth.isOtpTimeout) {
+                          
+                          if (!isOtpSent
+                          //TODO: uncomment this
+                          //  || auth.isOtpTimeout
+                           ) {
                             setState(() {
                               auth.sendOtp(phoneNumber: phno!).then((value) {
                                 isOtpSent = true;

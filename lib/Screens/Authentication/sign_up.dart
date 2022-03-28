@@ -341,7 +341,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     verificationCode) async {
                       signUp(otp: verificationCode);
                     }),
-                if(auth.isOtpTimeout)
+                    // TODO: uncomment this
+                // if(auth.isOtpTimeout)
                   GestureDetector(
                     onTap: (){
                       setState(() {

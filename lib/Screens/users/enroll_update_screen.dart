@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:geocode/geocode.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:sih_2022_sahaye/Screens/user_role_screen.dart';
+import 'package:sih_2022_sahaye/Screens/users/slot_book.dart';
 import 'package:sih_2022_sahaye/widgets/custom_text_widget.dart';
 import 'dart:io';
+
 import 'package:intl/intl.dart';
 import '../../Models/constants.dart';
 import '../../Models/size_config.dart';
@@ -19,11 +25,79 @@ class EnrollUpdateScreen extends StatefulWidget {
 }
 
 class _EnrollUpdateScreenState extends State<EnrollUpdateScreen> {
+  final form = GlobalKey<FormState>();
   String stats="States";
   String gender="Gender";
+  LocationData? currentLocation;
+  Future<LocationData?> _getLocation() async {
+     var location = Location();
+    LocationData _locationData;
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return null;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return null;
+      }
+    }
+
+
+    _locationData = await location.getLocation();
+
+    return _locationData;
+  }
+
+  Future<String> _getAddress(double? lat, double? lang) async {
+    if (lat == null || lang == null) return "";
+    GeoCode geoCode = GeoCode();
+    Address address =
+    await geoCode.reverseGeocoding(latitude: lat, longitude: lang);
+    pinCode=address.postal;
+    stats=address.city!;
+    return "${address.streetAddress}, ${address.city}, ${address.countryName}, ${address.postal}";
+  }
+  Future getLocation({address})async{
+    if(address!=null)
+      {
+        var cordinate=await GeoCode().forwardGeocoding(address: address);
+        currentLocation!.longitude!=cordinate.longitude;
+        currentLocation!.latitude!=cordinate.latitude;
+      }
+  }
+
   final dob=TextEditingController();
-   DateTime? _saveDate;
-  final form = GlobalKey<FormState>();
+   DateTime? _saveDate=DateTime.now();
+   String? eml;
+   String? fnm,lnm,phno,address,pinCode;
+   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+   _getLocation().then((value){
+      LocationData? location = value;
+      _getAddress(location?.latitude, location?.longitude)
+          .then((value) {
+            if(mounted) {
+              setState(() {
+          currentLocation = location;
+          address = value;
+        });
+            }
+      });
+    });
+  }
+
   Future _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -45,7 +119,6 @@ class _EnrollUpdateScreenState extends State<EnrollUpdateScreen> {
 
     if (picked != null) {
       setState(() {
-        print(picked.toString());
         _saveDate=picked;
         dob.text = DateFormat('dd-MM-yyyy').format(picked);
       });
@@ -53,6 +126,7 @@ class _EnrollUpdateScreenState extends State<EnrollUpdateScreen> {
 
 
   }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar:cutomAppBar(isLoggedIn: true, context: context),
@@ -60,22 +134,26 @@ class _EnrollUpdateScreenState extends State<EnrollUpdateScreen> {
       body: SingleChildScrollView(
         child: Form(
           key: form,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Center(child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
-                child: CustomTextWidget(txt: widget.index==0?"Enroll For Aadhaar":"Update My Aadhar", clr: Color(0XFF464444),fontSize: 30,),
+                child: CustomTextWidget(txt: widget.index==0?"Enroll For Aadhaar":"Update My Aadhaar", clr: const Color(0XFF464444),fontSize: 30,),
               )
               ),
               Row(
                 children: [
                   Flexible(
                     child: CustomTextFields(
-
                       validator: (value){
+                        if(value.toString().isEmpty)
+                          {
+                            return "Name is required";
+                          }
+                        return null;
                       }, changed: (value) {
+                        fnm=value;
 
                     }, type: TextInputType.name, title: 'First Name',),
                   ),
@@ -83,23 +161,43 @@ class _EnrollUpdateScreenState extends State<EnrollUpdateScreen> {
                     child: CustomTextFields(
 
                       validator: (value){
+                        return null;
                       }, changed: (value) {
-
+                        lnm=value;
                     }, type: TextInputType.name, title: 'Last Name',),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Flexible(
+                    child: CustomTextFields(
+                      validator: (value){
+                        if(value.toString().isNotEmpty &&  !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value))
+                        {
+                          return "Enter valid email or leave it blank";
+                        }
+                        return null;
+                      }, changed: (value) {
+                      eml=value;
+                    }, type: TextInputType.emailAddress, title: 'Enter Email Address',),
                   ),
                 ],
               ),
               CustomTextFields(
 
                 validator: (value){
+                  if(value.toString().isEmpty)
+                  {
+                    return "Mobile number can't be empty";
+                  }
+                  if(value.toString().length<10)
+                  {
+                    return "Enter valid Mobile Number";
+                  }
+                  return null;
                 }, changed: (value) {
-
-              }, type: TextInputType.emailAddress, title: '${widget.index==1?"New ":""}Email ID',),
-              CustomTextFields(
-
-                validator: (value){
-                }, changed: (value) {
-
+                  phno=value;
               }, type: TextInputType.phone, title: '${widget.index==1?"New ":""}Mobile No.',),
               CustomDropDownButton(lst:Genders, msg: gender, changed: (value) {
                 setState(() {
@@ -115,71 +213,82 @@ class _EnrollUpdateScreenState extends State<EnrollUpdateScreen> {
               ),
               CustomTextFields(
                 validator: (value){
+                  if(value.toString().isEmpty && pinCode==null)
+                    {
+                      return "PinCode is required";
+                    }
+                  else if(value.toString().length<6  && pinCode==null)
+                    {
+                      return "Invalid PinCode";
+                    }
+                  return null;
                 }, changed: (value) {
-
-              }, type: TextInputType.phone, title: 'Pin Code',),
+                  pinCode=value;
+              }, type: TextInputType.phone, title: pinCode==null?'Pin Code':pinCode.toString(),),
               CustomTextFields(
                 validator: (value){
+                  if(value.toString().isEmpty && address==null)
+                    {
+                      return "Address is required";
+                    }
+                  return null;
                 }, changed: (value) {
-
-              }, type: TextInputType.streetAddress, title: '${widget.index==1?"New ":""}Address',),
+                  address=value;
+              }, type: TextInputType.streetAddress, title: address ?? (widget.index==1?"New ":"Address"),),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(12),
                 child: GestureDetector(
                   onTap: (){
                     _selectDate(context);
                   },
-                  child: Material(
-                    elevation: 5,
-                    child: Container(
-                      decoration:  BoxDecoration(
-                          color: const Color(0XFFF3F3F3),
-                          borderRadius: BorderRadius.circular(16)
-                      ),
-                      child: AbsorbPointer(
-                        child: TextFormField(
-                            textAlignVertical: TextAlignVertical.center,
-                            maxLines: 1,
-                            controller: dob,
-                            //initialValue: dob,
-                            keyboardType: TextInputType.datetime,
-                            textInputAction: TextInputAction.next,
-                            autofocus: false,
-                            style: TextStyle(
-                                fontSize: 14 * SizeConfig.safeBlockWidth,
-                                color: Colors.black),
+                  child: Container(
+                    decoration:  BoxDecoration(
+                        color: const Color(0XFFF3F3F3),
+                        borderRadius: BorderRadius.circular(16)
+                    ),
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                          textAlignVertical: TextAlignVertical.center,
+                          maxLines: 1,
+                          controller: dob,
+                          //initialValue: dob,
+                          keyboardType: TextInputType.datetime,
+                          textInputAction: TextInputAction.next,
+                          autofocus: false,
+                          style: TextStyle(
+                              fontSize: 14 * SizeConfig.safeBlockWidth,
+                              color: Colors.black),
 //                      style: CustomThemes.ts5,
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.all(10),
-                              hintText: "Date of Birth",
-                              border:InputBorder.none,
-                              suffixIcon: Icon(
-                                Icons.arrow_drop_down_sharp,
-                                color: Colors.black,
-                              ),
+                          decoration: const InputDecoration(
+                            contentPadding:EdgeInsets.symmetric(vertical: 30,horizontal: 20),
+                            hintText: "Date of Birth",
+                            border:InputBorder.none,
+                            suffixIcon: Icon(
+                              Icons.arrow_drop_down_sharp,
+                              color: Colors.black,
                             ),
-                            validator: ( _dt){
-                              if(_dt!.isEmpty)
-                                {
-                                  return "Cant be empty dob";
-                                }
-                              else
-
-                              {
-                                final d1=_saveDate;
-                                final d2=DateTime.now();
-                                var difference=d2.difference(d1!).inDays;
-                                var year=difference/365;
-                                if(year<13)
-                                {
-                                  return "* Age must be greater or equal to 13";
-                                }
-                              }
-
-
-                              return null;
+                          ),
+                          validator: ( _dt){
+                            if(_dt!.isEmpty)
+                            {
+                              return "Cant be empty dob";
                             }
-                        ),
+                            else
+
+                            {
+                              final d1=_saveDate;
+                              final d2=DateTime.now();
+                              var difference=d2.difference(d1!).inDays;
+                              var year=difference/365;
+                              if(year<=5)
+                              {
+                                return "* Age must be greater or equal to 5";
+                              }
+                            }
+
+
+                            return null;
+                          }
                       ),
                     ),
                   ),
@@ -191,7 +300,24 @@ class _EnrollUpdateScreenState extends State<EnrollUpdateScreen> {
                 child: CustomTextWidget(txt: "(in case you don’t wish to change something you can write the current information)",maxLines: 3, clr: Color(0XFF666161),fontSize: 12,),
               ),
               GestureDetector(
-                onTap: (){},
+                onTap: (){
+                  if(form.currentState!.validate())
+                    {
+
+                      /*getLocation(address: address.toString()+' '+ stats.toString()+' '+pinCode.toString()).then((value){*/
+                        Map data={
+                          'userLatitude':currentLocation!.latitude.toString(),
+                          'userLongitude':currentLocation!.longitude.toString(),
+                          'userFirstName':fnm,
+                          'userID':userId,
+                          "requestType":widget.index==0?"Enrollment For Aadhar":"Update For Aadhar",
+                        };
+                        print(data.toString());
+                        Navigator.push(context, MaterialPageRoute(builder: (builder)=>SlotBookUserScreen(userData: data,index: widget.index,)));
+                     // });
+
+                    }
+                },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 50),
                   child: Container(

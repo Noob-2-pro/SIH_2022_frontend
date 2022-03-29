@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../Screens/users/enroll_update_screen.dart';
+import '../Screens/users/feedsback_form.dart';
 import 'custom_text_widget.dart';
 
-
+import 'package:url_launcher/url_launcher.dart';
  Widget btnContainer({required Color clr,required String svg,required String title,required int index,required BuildContext context}){
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -14,7 +15,14 @@ import 'custom_text_widget.dart';
             {
               Navigator.push(context, MaterialPageRoute(builder: (builder)=>EnrollUpdateScreen(index: index)));
             }
-
+          else if(index==2)
+            {
+              Navigator.push(context, MaterialPageRoute(builder: (builder)=>const FeedBackForm()));
+            }
+          else
+            {
+              launch("tel:+919667041944");
+            }
         },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical:20),

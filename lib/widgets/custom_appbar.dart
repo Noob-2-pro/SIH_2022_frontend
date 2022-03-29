@@ -16,6 +16,10 @@ AppBar cutomAppBar({required bool isLoggedIn,required BuildContext context}) {
         "assets/images/logo.png",
         width: 100.w,
       ),
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.black),
+        onPressed: () => Navigator.of(context).pop(),
+      ),
       actions:    (isLoggedIn)?[
        Image.asset("assets/images/user_1.png"),
 

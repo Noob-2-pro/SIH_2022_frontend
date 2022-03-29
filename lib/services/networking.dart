@@ -12,9 +12,9 @@ class DBPost{
     //debugPrint(res.body.toString());
     if(res.statusCode==404)
       {    print('error4');
-        throw (res.body.toString());
+        throw( res.body.toString());
       }
-    else if(res.statusCode==505)
+    else if(res.statusCode==503)
       {   print('error5');
         throw(res.body.toString());
       }

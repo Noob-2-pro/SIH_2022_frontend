@@ -9,10 +9,10 @@ import 'Authentication/login_screen.dart';
 
 class UserRole extends StatelessWidget {
   const UserRole({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    // SizeConfig().init(context);
+
+    SizeConfig().init(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar:cutomAppBar(isLoggedIn: false, context: context),

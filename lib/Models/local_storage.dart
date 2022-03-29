@@ -9,5 +9,10 @@ class UserModel{
   }
   Future deleteUserId() async {
     storage.delete(key: 'user_type');
+    storage.delete(key: 'phno');
+  }
+  Future phoneNumber() async {
+    var res=await storage.read(key:'phno');
+    return res;
   }
 }

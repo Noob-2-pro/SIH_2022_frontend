@@ -3,17 +3,16 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import 'package:sih_2022_sahaye/providers/authentication_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:sih_2022_sahaye/providers/authentication_provider.dart';
 import 'package:sih_2022_sahaye/services/networking.dart';
 
-// import '../Models/user_model.dart';
+import '../Models/user_model.dart';
 class Authentication{
   final _auth=FirebaseAuth.instance;
   String? verificationId1;
   final DBPost post=DBPost();
   BuildContext? context;
-
   Future sendOtp( {required String phoneNumber})async{
     phoneNumber='+91'+phoneNumber.toString();
     try{
@@ -47,9 +46,8 @@ class Authentication{
   _onCodeTimeout(String timeout) {
 
     log(timeout);
-    if(context!=null) {
-      //TODO : uncomment this
-      // Provider.of<AuthProvider>(context!,listen: false).setIsOtpTimeOut(true);
+    if(context!=null ) {
+      Provider.of<AuthProvider>(context!,listen: false).setIsOtpTimeOut(true);
     }
     return null;
   }
@@ -64,11 +62,12 @@ class Authentication{
           throw (error);
     });
     //var encode=jsonEncode(res.toString());
-    var decode=jsonDecode(res);
+    var decode=jsonDecode(res.toString());
     return decode;
   }
  
   Future loginRequest({required Map data}) async {
+    print('hit');
     var res = await post.sendRequest(
         headers1: {
           'Content-Type':'application/json',

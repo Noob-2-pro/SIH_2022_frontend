@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sih_2022_sahaye/Screens/users/slot_booked_screen.dart';
 
+import '../../Models/constants.dart';
+import '../../Models/local_storage.dart';
+import '../../Models/user_model.dart';
+import '../../services/authentication.dart';
+import '../../services/user_services.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_text_input_fields.dart';
 import '../../widgets/custom_text_widget.dart';
 class FeedBackForm extends StatefulWidget {
+
   const FeedBackForm({Key? key}) : super(key: key);
 
   @override
@@ -14,6 +22,29 @@ class FeedBackForm extends StatefulWidget {
 class _FeedBackFormState extends State<FeedBackForm> {
   int ratings=0;
   bool isRated=false;
+  String? comments;
+  dynamic data;
+  @override
+  void initState() {
+    // TODO: implement initState
+    UserModel().phoneNumber().then((value){
+      Authentication().loginRequest(data: {"phoneNumber":value}).then((res){
+        print(res[0].toString());
+        userId=res['_id'].toString();
+        print(userId.toString());
+        UserServices().getUserSlot(data: {"userID":userId}).then((value){
+          data=value[0];
+        });
+
+      }).catchError((error){
+        Fluttertoast.showToast(msg:"Something went wrong");
+
+        print(error);
+      });
+    });
+    super.initState();
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +61,7 @@ class _FeedBackFormState extends State<FeedBackForm> {
             if(!isRated)
             CustomTextFields(
               validator: (value){
+
               }, changed: (value) {
 
             }, type: TextInputType.name, title: 'Operator’s Name',),
@@ -38,7 +70,9 @@ class _FeedBackFormState extends State<FeedBackForm> {
               height: 300,
               child: CustomTextFields(title: 'How was your experience?', validator: (value) {
                 return null;
-                }, changed: (value) {  }, type: TextInputType.multiline,),
+                }, changed: (value) {
+                comments=value;
+              }, type: TextInputType.multiline,),
             ),
             if(!isRated)
             const Padding(
@@ -86,18 +120,15 @@ class _FeedBackFormState extends State<FeedBackForm> {
             ),
             if(isRated)
               Padding(
-                padding: const EdgeInsets.only(top: 50,bottom: 50),
+                padding:  const EdgeInsets.only(top: 0,bottom: 10),
                 child: Center(
-                  child: SvgPicture.string(''''<svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="428" height="200" viewBox="0 0 428.000000 200.000000" preserveAspectRatio="xMidYMid meet">
-
-<g transform="translate(0.000000,200.000000) scale(0.100000,-0.100000)" fill="#000000" stroke="none">
-<path d="M2883 1977 c-6 -7 -67 -124 -138 -262 -171 -335 -311 -608 -405 -790 -42 -82 -128 -249 -190 -370 -62 -121 -116 -223 -119 -227 -3 -4 -29 20 -56 54 -28 34 -66 80 -85 103 -19 23 -100 122 -180 220 -80 98 -150 183 -155 189 -6 6 -32 39 -59 74 -27 34 -50 62 -52 62 -11 0 -143 -114 -139 -120 2 -4 32 -10 66 -14 197 -20 349 -182 503 -536 71 -163 118 -200 184 -146 42 36 83 122 137 286 26 80 64 177 83 215 40 77 135 179 264 283 120 96 140 143 178 417 12 83 30 178 42 213 26 82 104 198 175 261 l55 49 -50 26 c-38 19 -52 22 -59 13z"/>
-</g>
-</svg>''',
-                    color: const Color(0XFF34AB53),
-                  ),
+                    child: SizedBox(
+                        height: 300,
+                        width: 200,
+                        child: Image.asset("assets/images/green tick.png"))
                 ),
               ),
+
             if(isRated)
             const Padding(
               padding: EdgeInsets.only(top: 50,bottom: 50),
@@ -106,10 +137,21 @@ class _FeedBackFormState extends State<FeedBackForm> {
             GestureDetector(
               onTap: (){
                 if(!isRated) {
-                  setState(() {
-                  isRated=true;
-                });
-
+                  Map body={
+                    "ID":data['_id'],
+                    "operatorID":data['operatorID'],
+                    "feedback":comments.toString(),
+                    "userID":data['userID'],
+                    "operatorStar":(ratings+1),
+                    "OTP":data['OTP']
+                  };
+                  print(body.toString());
+                  UserServices().feedBack(data:body).then((value){
+                    print(value.toString());
+                    setState(() {
+                      isRated=true;
+                    });
+                  });
                 }
                 else
                 {

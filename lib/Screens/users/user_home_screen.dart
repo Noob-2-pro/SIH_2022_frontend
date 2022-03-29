@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:sih_2022_sahaye/Models/constants.dart';
+import 'package:sih_2022_sahaye/Models/user_model.dart';
+import 'package:sih_2022_sahaye/Screens/users/slot_booked_screen.dart';
+import 'package:sih_2022_sahaye/services/user_services.dart';
+import '../../Models/local_storage.dart';
 import '../../Models/size_config.dart';
+import '../../services/authentication.dart';
 import '../../widgets/custom_action_button.dart';
 import '../../widgets/custom_appbar.dart';
 
@@ -11,6 +17,27 @@ class UserHomeScreen extends StatefulWidget {
 }
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    UserModel().phoneNumber().then((value){
+      Authentication().loginRequest(data: {"phoneNumber":value}).then((res){
+        print(res[0].toString());
+        userId=res['_id'].toString();
+          print(userId.toString());
+          UserServices().getUserSlot(data: {"userID":userId}).then((value){
+            print(value.toString());
+            if(value.length!=0)
+            {
+              Navigator.push(context, MaterialPageRoute(builder: (builder)=>SlotBookedScreenConfirmation(data:{'otp':value[0]['OTP']})));
+            }
+          });
+
+      });
+    });
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);

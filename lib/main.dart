@@ -42,6 +42,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     bool isLoggedIn = widget.isLoggedIn;
     String index = widget.index;
+
     return ScreenUtilInit(
         designSize: const Size(428, 926),
         minTextAdapt: true,
@@ -50,24 +51,7 @@ class _MyAppState extends State<MyApp> {
               title: 'MyApp',
               key: _navKey,
               debugShowCheckedModeBanner: false,
-              // home: isLoggedIn
-              //     ? (index.toString() == "0"
-              //         ? const UserHomeScreen()
-              //         : (index.toString() == "1"
-              //             ? HomeScreenOP()
-              //             : (index.toString() == "2"
-              //                 ? const AdminHomeScreen()
-              //                 : const GettingStartedScreen())))
-              //     : const GettingStartedScreen(),
               home: HomeScreenOP(),
-              //  home: isLoggedIn?(index.toString()=="0"? UserHomeScreen():(index.toString()=="1"? HomeScreenOP():(index.toString()=="2"?const AdminHomeScreen():const GettingStartedScreen()))):const GettingStartedScreen(),
-              /* builder: (context, widget) {
-                ScreenUtil.setContext(context);
-                return MediaQuery(
-                  data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                  child: isLoggedIn?(index.toString()=="0"?const UserHomeScreen():(index.toString()=="1"?const HomeScreenOP():(index.toString()=="2"?const AdminHomeScreen():const GettingStartedScreen()))):const GettingStartedScreen(),
-                );
-              },*/
               theme: ThemeData(
                 textTheme: TextTheme(
                   headline1: GoogleFonts.openSans(

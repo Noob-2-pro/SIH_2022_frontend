@@ -25,10 +25,11 @@ class _HomeScreenOPState extends State<HomeScreenOP> {
     return await SlotData().getSlotData(data: {"operatorID": "62413f7a16bc5847990659c6"});
   }
 
+  int slotCount = 0;
+
   @override
   void initState() {
     getSlotData();
-
     super.initState();
   }
 
@@ -90,7 +91,7 @@ class _HomeScreenOPState extends State<HomeScreenOP> {
                                       ),
                                       color: Colorpalette.lightPurple),
                                   child: Text(
-                                    'Slots Completed - 0 / 5',
+                                    'Slots Completed - 1 / 5',
                                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.w),
                                   ),
                                 )
@@ -114,9 +115,11 @@ class _HomeScreenOPState extends State<HomeScreenOP> {
                         List<SlotInfo> slotdata = snapshot.data!;
 
                         List<SlotInfo> pendingSlot =
-                            slotdata.where((element) => element.availability.toString() == 'Pending').toList();
+                            slotdata.where((element) => element.status.toString() == 'Pending').toList();
                         List<SlotInfo> completedSlot =
-                            slotdata.where((element) => element.availability.toString() == 'Completed').toList();
+                            slotdata.where((element) => element.status.toString() == 'Completed').toList();
+
+                        slotCount = completedSlot.length;
 
                         return Padding(
                           padding: const EdgeInsets.only(left: 15),
@@ -149,8 +152,11 @@ class _HomeScreenOPState extends State<HomeScreenOP> {
                                         Colorpalette.lightPurple,
                                         () {
                                           Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                            return ViewDetails(userData: pendingSlot[index] ,);
-                                          }));
+                                            return ViewDetails(
+                                              userData: pendingSlot[index],
+                                            );
+                                          },
+                                          ));
                                         },
                                       );
                                     }),
@@ -179,7 +185,9 @@ class _HomeScreenOPState extends State<HomeScreenOP> {
                                         Colorpalette.lightpink,
                                         () {
                                           Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                            return ViewDetails(userData: completedSlot[index],);
+                                            return ViewDetails(
+                                              userData: completedSlot[index],
+                                            );
                                           }));
                                         },
                                       );
@@ -216,9 +224,9 @@ class _HomeScreenOPState extends State<HomeScreenOP> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  cardTile(sr.userFirstName, Icons.person),
-                  cardTile(sr.requestType, Icons.request_page),
-                  cardTile(sr.userLatitude, Icons.location_pin),
+                  cardTile(sr.userFirstName.toString(), Icons.person),
+                  cardTile(sr.requestType.toString(), Icons.request_page),
+                  cardTile(sr.userLatitude.toString(), Icons.location_pin),
                   cardTile("${starttime.format(context)} - ${endTime.format(context)}", Icons.access_time),
                 ],
               ),

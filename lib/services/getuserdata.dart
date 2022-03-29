@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:sih_2022_sahaye/Models/user_modal.dart';
-import '../constants.dart';
 import 'networking.dart';
 
 class User {

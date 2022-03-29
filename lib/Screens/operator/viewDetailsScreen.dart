@@ -37,12 +37,12 @@ class _ViewDetailsState extends State<ViewDetails> {
   }
 
   Future<UserData> getuserDatabyId() async {
-    return await User().getUserById(data: {"userID": "${widget.userData.id}"});
+    return await User().getUserById(data: {"userID": "${widget.userData.userId}"});
   }
 
   @override
   void initState() {
-    // TODO: implement initState
+    print(widget.userData.userId);
     super.initState();
   }
 
@@ -50,6 +50,8 @@ class _ViewDetailsState extends State<ViewDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: cutomAppBar(context: context, isLoggedIn: true),
+      // body: Container(),
+
       body: FutureBuilder<UserData>(
           future: getuserDatabyId(),
           builder: (context, snapshot) {
@@ -61,11 +63,12 @@ class _ViewDetailsState extends State<ViewDetails> {
                   return Text('Error: ${snapshot.error}');
                 else {
                   final user = snapshot.data!;
-                     TimeOfDay starttime =
-        TimeOfDay(hour: int.parse(widget.userData.startTime!.substring(0, 2)), minute: int.parse(widget.userData.startTime!.substring(2)));
-    TimeOfDay endTime =
-        TimeOfDay(hour: int.parse(widget.userData.endTime!.substring(0, 2)), minute: int.parse(widget.userData.endTime!.substring(2)));
-
+                  TimeOfDay starttime = TimeOfDay(
+                      hour: int.parse(widget.userData.startTime!.substring(0, 2)),
+                      minute: int.parse(widget.userData.startTime!.substring(2)));
+                  TimeOfDay endTime = TimeOfDay(
+                      hour: int.parse(widget.userData.endTime!.substring(0, 2)),
+                      minute: int.parse(widget.userData.endTime!.substring(2)));
                   return Column(
                     children: [
                       Container(
@@ -89,7 +92,7 @@ class _ViewDetailsState extends State<ViewDetails> {
                             Text("Name :  ${user.firstName} ${user.endTime} "),
                             Text("Service : ${user.firstName}"),
                             Text("place : Rohini"),
-                            Text(starttime.toString()+ endTime.toString()),
+                            Text(starttime.format(context) + ' - ' + endTime.format(context)),
                           ],
                         ),
                       ),

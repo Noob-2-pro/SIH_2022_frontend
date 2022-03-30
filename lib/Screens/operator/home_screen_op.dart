@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sih_2022_sahaye/Models/local_storage.dart';
 import 'package:sih_2022_sahaye/Models/service_requests.dart';
 import 'package:sih_2022_sahaye/Models/user_modal.dart';
 import 'package:sih_2022_sahaye/Screens/operator/services/get_slot_info.dart';
@@ -29,6 +30,9 @@ class _HomeScreenOPState extends State<HomeScreenOP> {
 
   @override
   void initState() {
+   /* UserModel().phoneNumber().then((value){
+      getSlotData()
+    });*/
     getSlotData();
     super.initState();
   }
@@ -41,7 +45,7 @@ class _HomeScreenOPState extends State<HomeScreenOP> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 20),
               child: Container(
                 padding: EdgeInsets.only(bottom: 20.h),
                 decoration: const BoxDecoration(

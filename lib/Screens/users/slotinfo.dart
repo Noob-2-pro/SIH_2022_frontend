@@ -304,34 +304,35 @@ class _SlotInfoState extends State<SlotInfo> {
                         isBooked: isBooked,
                         onTap: (value) {
                           setState(() {
-                            isSelected = index;
-                          });
-                          bookedTime = availableSlots[index].toString().split('-')[0].toString();
-                          if(index==0)
+                            if(index==0)
                             {
                               s1="0900";
                               s2="1000";
                             }
-                          else if(index==1)
-                          {
-                            s1="1030";
-                            s2="1130";
-                          }
-                          else if(index==2)
-                          {
-                            s1="1200";
-                            s2="1300";
-                          }
-                          else if(index==3)
-                          {
-                            s1="1330";
-                            s2="1430";
-                          }
-                          else if(index==1)
-                          {
-                            s1="1500";
-                            s2="1600";
-                          }
+                            else if(index==1)
+                            {
+                              s1="1030";
+                              s2="1130";
+                            }
+                            else if(index==2)
+                            {
+                              s1="1200";
+                              s2="1300";
+                            }
+                            else if(index==3)
+                            {
+                              s1="1330";
+                              s2="1430";
+                            }
+                            else if(index==1)
+                            {
+                              s1="1500";
+                              s2="1600";
+                            }
+                            isSelected = index;
+                          });
+                          bookedTime = availableSlots[index].toString().split('-')[0].toString();
+
                           /*var bookedTime1 = availableSlots[index].toString().split('-')[0].toString();
                           int hour = int.parse(bookedTime!.split(':')[0]);
                           int min = int.parse(bookedTime!.split(' ')[0].split(':')[1]);

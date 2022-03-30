@@ -37,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var isLoading = false;
   @override
   void initState() {
-    Provider.of<AuthProvider>(context,listen: false).isOtpTimeOut=false;
+    Provider.of<AuthProvider>(context, listen: false).isOtpTimeOut = false;
     // TODO: implement initState
     super.initState();
 
@@ -47,11 +47,12 @@ class _LoginScreenState extends State<LoginScreen> {
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     // SizeConfig().init(context);
-    auth.context=context;
-    bool isOtpTimeout=Provider.of<AuthProvider>(context).getIsOtpTimeOut;
+    auth.context = context;
+    bool isOtpTimeout = Provider.of<AuthProvider>(context).getIsOtpTimeOut;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: null,
@@ -64,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Stack(
             children: [
               Opacity(
-                opacity:  isLoading ? 0.5 : 1,
+                opacity: isLoading ? 0.5 : 1,
                 child: AbsorbPointer(
                   absorbing: isLoading,
                   child: Column(
@@ -114,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 },
                                 changed: (value) {
                                   otp = value;
-                                 /* if (value.length == 6) {
+                                  /* if (value.length == 6) {
                                     signIn();
                                   }*/
                                 },
@@ -125,11 +126,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    isLoading=true;});
+                                    isLoading = true;
+                                  });
                                   sendOTP();
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 50, right: 50),
+                                  padding: const EdgeInsets.only(
+                                      left: 50, right: 50),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: const [
@@ -148,25 +151,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 50),
                             child: InkWell(
                               onTap: () async {
                                 if (form.currentState!.validate()) {
                                   if (!isOtpSent) {
                                     setState(() {
-                                            isLoading=true;});
-                                      sendOTP();
-
-                                  }
-                                  else {
+                                      isLoading = true;
+                                    });
+                                    sendOTP();
+                                  } else {
                                     signIn();
                                   }
                                 }
                               },
                               child: Container(
-                                padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 0),
-                                decoration:
-                                    BoxDecoration(color: const Color(0XFFCBA7FF), borderRadius: BorderRadius.circular(15)),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 30, horizontal: 0),
+                                decoration: BoxDecoration(
+                                    color: const Color(0XFFCBA7FF),
+                                    borderRadius: BorderRadius.circular(15)),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -187,12 +192,16 @@ class _LoginScreenState extends State<LoginScreen> {
                               onTap: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => SignUpScreen(index: widget.index)),
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          SignUpScreen(index: widget.index)),
                                 );
                               },
                               child: const Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: CustomTextWidget(txt: "New User? Sign Up now", clr: Color(0XFF555252)),
+                                child: CustomTextWidget(
+                                    txt: "New User? Sign Up now",
+                                    clr: Color(0XFF555252)),
                               ),
                             ),
                         ],
@@ -211,12 +220,13 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
   sendOTP() async {
     await auth.sendOtp(phoneNumber: phno!).then((value) {
       setState(() {
         isOtpSent = true;
       });
-      Provider.of<AuthProvider>(context,listen: false).setIsOtpTimeOut(false);
+      Provider.of<AuthProvider>(context, listen: false).setIsOtpTimeOut(false);
     }).catchError((error) {
       setState(() {
         isOtpSent = false;
@@ -225,41 +235,43 @@ class _LoginScreenState extends State<LoginScreen> {
       debugPrint(error.toString());
     });
     setState(() {
-      isLoading=false;
+      isLoading = false;
     });
   }
+
   Future signIn() async {
     setState(() {
-      isLoading=true;
+      isLoading = true;
     });
-    try
-    {
+ try {
       final credential = PhoneAuthProvider.credential(
         verificationId: auth.verificationId1.toString(),
         smsCode: otp.toString(),
       );
-      FirebaseAuth.instance.signInWithCredential(credential).then((value) async {
+      FirebaseAuth.instance.signInWithCredential(credential).then(
+          (value) async {
         Map body = {"phoneNumber": phno.toString()};
-        await auth.loginRequest(data: body).then((value) {
-          navigation(index: value['type'].toString()=="User"?0:(value['type'].type.toString()=="Operator"?1:2));
-        }).catchError((error){
-          throw(error);
+        auth.loginRequest(data: body).then((value) {
+
+          navigation(
+              index: value['type'].toString() == "User"
+                  ? 0
+                  : (value['type'].toString() == "Operator" ? 1 : 2));
+        }).catchError((error) {
+          throw (error);
         });
-    },
-    onError: (error){
-      Fluttertoast.showToast(msg:"Invalid OTP,");
+      } ,onError: (error) {
+        Fluttertoast.showToast(msg: "Invalid OTP,");
         print(error);
-    });
-  }
-  catch(e)
-    {
-      if(FirebaseAuth.instance.currentUser!=null) {
-      FirebaseAuth.instance.signOut();
-    }
+      });
+    } catch (e) {
+      if (FirebaseAuth.instance.currentUser != null) {
+        FirebaseAuth.instance.signOut();
+      }
       Fluttertoast.showToast(msg: e.toString());
     }
     setState(() {
-      isLoading=false;
+    isLoading = false;
     });
   }
 

@@ -77,7 +77,7 @@ class Authentication{
               throw (error);
     });
     //var encode=jsonEncode(res.toString());
-    var decode=jsonDecode(res);
+    var decode=jsonDecode(res.toString());
     return decode;
   }
 }

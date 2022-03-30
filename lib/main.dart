@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:sih_2022_sahaye/Screens/Authentication/login_screen.dart';
 import 'package:sih_2022_sahaye/Screens/app_getting_started_screen.dart';
 import 'package:sih_2022_sahaye/Screens/operator/home_screen_op.dart';
 import 'package:sih_2022_sahaye/providers/authentication_provider.dart';
@@ -33,10 +32,8 @@ final _navKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatefulWidget {
   final bool isLoggedIn;
-  final String
-      index; //for recognize user 0 for normal,1 for operator and 2 for admin.
-  const MyApp({Key? key, required this.isLoggedIn, this.index = ""})
-      : super(key: key);
+  final String index; //for recognize user 0 for normal,1 for operator and 2 for admin.
+  const MyApp({Key? key, required this.isLoggedIn, this.index = ""}) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -46,6 +43,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     bool isLoggedIn = widget.isLoggedIn;
     String index = widget.index;
+
     return ScreenUtilInit(
         designSize: const Size(428, 926),
         minTextAdapt: true,

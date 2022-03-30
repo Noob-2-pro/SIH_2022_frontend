@@ -343,8 +343,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
           "email":eml.toString(),
         };
         await auth.signUpRequest(data: body).then((value) {
-          /*final welcome = welcomeFromJson(value);*/
-          navigation(index: value['type'].toString()=="User"?0:(value['type'].type.toString()=="Operator"?1:2));
+          auth.loginRequest(data: body).then((value) {
+
+            navigation(
+                index: value['type'].toString() == "User"
+                    ? 0
+                    : (value['type'].toString() == "Operator" ? 1 : 2));
+          }).catchError((error) {
+            throw (error);
+          });
         }).catchError((error){
           throw(error);
         });

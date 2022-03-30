@@ -51,6 +51,7 @@ class Authentication{
     }
     return null;
   }
+ 
   Future signUpRequest({required Map data}) async {
     var res = await post.sendRequest(
         data: data,
@@ -64,6 +65,7 @@ class Authentication{
     var decode=jsonDecode(res.toString());
     return decode;
   }
+ 
   Future loginRequest({required Map data}) async {
     print('hit');
     var res = await post.sendRequest(
@@ -75,7 +77,7 @@ class Authentication{
               throw (error);
     });
     //var encode=jsonEncode(res.toString());
-    var decode=jsonDecode(res);
+    var decode=jsonDecode(res.toString());
     return decode;
   }
 }
